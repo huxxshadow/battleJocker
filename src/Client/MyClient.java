@@ -5,25 +5,59 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class MyClient {
+    private Socket socket;
+    private BufferedReader reader;
+    private BufferedWriter writer;
 
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 8080)) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    private GameEngine gameEngine;
 
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-            Scanner consoleReader = new Scanner(System.in);
+    public MyClient(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
+    }
+    public void connect(){
+        try {
+            socket = new Socket("localhost", 8080);
+            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-            String userInput;
-            while (true) {
-                System.out.print("请输入消息: ");
-                userInput = consoleReader.nextLine();  // 读取用户输入
-                writer.write(userInput + "\n");  // 发送用户输入的消息
-                writer.flush();  // 刷新输出流，确保消息被立即发送
-                System.out.println("服务器回应: " + reader.readLine());  // 读取服务器的响应
+            writer.write("start,player1,room2\n");
+            writer.flush();
+//            String response = reader.readLine();
+            new Thread(this::listenToServer).start();
+//            System.out.println("Response from server: " + response);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMove(String dir){
+
+        try {
+            writer.write(dir + "\n");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 持续监听服务器的消息
+    private void listenToServer() {
+        try {
+            String response;
+            while ((response = reader.readLine()) != null) {
+                System.out.println("更新 " + response);
+                handleServerUpdate(response);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 处理从服务器接收到的数据
+    private void handleServerUpdate(String response) {
+        gameEngine.setAll(response.split(","));
     }
 }

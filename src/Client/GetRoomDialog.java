@@ -1,4 +1,5 @@
-import javafx.event.ActionEvent;
+package Client;
+
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class GetNameDialog {
+public class GetRoomDialog {
     @FXML
     TextField nameField;
 
@@ -18,9 +19,9 @@ public class GetNameDialog {
     Button goButton;
 
     Stage stage;
-    String playername;
+    String roomname;
 
-    public GetNameDialog() throws IOException {
+    public GetRoomDialog() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("getNameUI.fxml"));
         loader.setController(this);
         Parent root = loader.load();
@@ -39,12 +40,12 @@ public class GetNameDialog {
 
     @FXML
     void OnButtonClick(Event event) {
-        playername = nameField.getText().trim();
-        if (playername.length() > 0)
+        roomname = nameField.getText().trim();
+        if (roomname.length() > 0)
             stage.close();
     }
 
-    public String getPlayername() {
-        return playername;
+    public String getRoomname() {
+        return roomname;
     }
 }

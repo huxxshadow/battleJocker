@@ -1,18 +1,15 @@
 package Server;
 
-import Server.Controller.RoundController;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MyServer {
     private int port;
-    private RoundController roundController;
+
 
     public MyServer(int port) {
         this.port = port;
-        this.roundController = new RoundController();
     }
 
     public void start() {

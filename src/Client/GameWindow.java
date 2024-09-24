@@ -1,3 +1,6 @@
+package Client;
+
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -23,6 +26,8 @@ public class GameWindow {
 
     @FXML
     Label nameLabel;
+    @FXML
+    Label roomLabel;
 
     @FXML
     Label scoreLabel;
@@ -72,6 +77,7 @@ public class GameWindow {
         stage.show();
         initCanvas();
 
+        gameEngine.connect();
         gameStart();
     }
 
@@ -86,6 +92,7 @@ public class GameWindow {
 
     private void initCanvas() {
         canvas.setOnKeyPressed(event -> {
+
             gameEngine.moveMerge(event.getCode().toString());
             scoreLabel.setText("Score: " + gameEngine.getScore());
             levelLabel.setText("Level: " + gameEngine.getLevel());
@@ -173,5 +180,10 @@ public class GameWindow {
     public void setName(String name) {
         nameLabel.setText(name);
         gameEngine.setPlayerName(name);
+    }
+
+    public void setRoom(String room) {
+        roomLabel.setText("Room:"+room);
+        gameEngine.setRoomName(room);
     }
 }

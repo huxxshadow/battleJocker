@@ -1,3 +1,5 @@
+package Client;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -11,8 +13,10 @@ public class BattleJoker extends Application {
     public void start(Stage primaryStage) {
         try {
             GetNameDialog dialog = new GetNameDialog();
+            GetRoomDialog roomDialog = new GetRoomDialog();
             GameWindow win = new GameWindow(primaryStage);
             win.setName(dialog.getPlayername());
+            win.setRoom(roomDialog.getRoomname());
             Database.connect();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
